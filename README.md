@@ -16,3 +16,6 @@ If you need to work within the virtual enviroment, run activate in the venv/Scri
 - activate <- Mac and Linux
 - activate.bar <- windows command line
 - activte.ps1 <- windows powershell
+
+
+If you have no idea what any of the above means, just open the terminal in the root directory of the project and type `venv/Scripts/python.exe main.py` and navigate to 127.0.0.1:5000
