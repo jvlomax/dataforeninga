@@ -1,4 +1,7 @@
 SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"
+SQLALCHEMY_BINDS = {
+    "td": "sqlite:///td.db"
+}
 SECRET_KEY = "SUPER SECRET KEY THAT NO ONE CAN FIND"
 CSRF_ENABLED = True
 USER_ENABLE_EMAIL = True

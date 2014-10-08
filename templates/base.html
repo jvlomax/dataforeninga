@@ -12,6 +12,9 @@
         <script type="application/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
         <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.css')}}">
         <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap-theme.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/custom.css')}}">
+        {% block post_head %}
+        {% endblock %}
     </head>
     <body>
         <div class="container">
@@ -43,5 +46,7 @@
             {% endblock %}
 
         </div>
+    {% block post_script %}
+    {% endblock post_script %}
     </body>
 </html>

@@ -4,6 +4,8 @@ from flask.ext.babel import Babel
 from flask.ext.user import current_user, login_required, UserManager, UserMixin, SQLAlchemyAdapter
 from wtforms.validators import ValidationError
 import config
+#from models.members import Members
+#from models.servers import Servers
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -23,7 +25,17 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(50), nullable=False)
 
+class Servers(db.Model):
+    __bind_key__ = "td"
+    __tablename__ = "servers"
+    sid = db.Column(db.Integer, primary_key=True, nullable=False)
+    uid = db.Column(db.Integer, nullable=False)
+    server_name = db.Column(db.String(20), nullable=False)
+    ip_address = db.Column(db.String(15), nullable=False)
+
+
 db.create_all()
+
 
 db_adapter = SQLAlchemyAdapter(db, User)
 user_manager = UserManager(db_adapter, password_validator=password_validator)
@@ -36,12 +48,21 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/styret")
+@app.route("/styret.html")
+def showStyret():
+    return render_template("styret.html")
+
 @app.route("/admin")
 @app.route("/admin.html")
-@login_required
-def admin():
-    return render_template("admin.html")
+def showAdmin():
 
+    mock_data = [{"first_name": "Bjarne", "last_name":"Betjent"}, {"first_name":"Max", "last_name":"Mekker"}]
+    return render_template("admin.html", members=mock_data)
 
+@app.route("/servers")
+def showServers():
+    servers = Servers.query.all()
+    return render_template("servers.html", servers=servers)
 if __name__ == "__main__":
     app.run(debug=True)

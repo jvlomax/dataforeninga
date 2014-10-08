@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block post_head %}
+    <script type="application/javascript" src="{{url_for('static', filename='js/Chart.js')}}"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/dashboard.css')}}">
+{% endblock post_head %}
+
+    {% block content %}
+    {% include "dashboard_sidebar.html" %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+
+        <h1 class="page-header">Dashboard</h1>
+
+          <div class="row row-centered charts">
+            <div class="col-xs-6 col-sm-3 col-centered placeholders">
+                <canvas id="membersChart" width="150" height="150"></canvas>
+              <h4>Members</h4>
+              <span class="text-muted">Payment levels</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 col-centered placeholders">
+                <canvas id="serversChart" width="150" height="150"></canvas>
+              <h4>Ip adresses</h4>
+              <span class="text-muted">Available Ips</span>
+            </div>
+          </div>
+        <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name </th>
+            </tr>
+        </thead>
+        {%  for member in members %}
+        <tr>
+            <td>{{ member.first_name }}</td>
+            <td>{{ member.last_name }}</td>
+        </tr>
+        {% endfor %}
+
+
+        </table>
+    </div>
+
+
+        {% endblock content %}
+{% block post_script %}
+<script>
+
+var membersData = [
+    {
+        value: 11,
+        color:"#0a83ec",
+        highlight: "#51a4ec",
+        label: "Payed"
+    },
+    {
+        value: 15,
+        color: "#ecbf0a",
+        highlight: "#eccd51",
+        label: "Not payed"
+    }
+
+]
+
+var serverData = [
+    {
+        value: 20,
+        color:"#FF0000",
+        highlight: "#FF5A5E",
+        label: "Currently used"
+    },
+    {
+        value: 93,
+        color: "#00cc00",
+        highlight: "#5ede5e",
+        label: "Available",
+        tooltip: "available"
+
+    }
+
+]
+
+var options = {
+
+    responsive: true,
+    showTooltips: true,
+    tooltipEvents: ["mousemove", "touchmove", "touchstart"]
+
+}
+
+
+var membersCtx = $("#membersChart").get(0).getContext("2d");
+var membersChart = new Chart(membersCtx).Pie(membersData, options);
+
+var serverCtx = $("#serversChart").get(0).getContext("2d");
+var serverChart = new Chart(serverCtx).Pie(serverData, options);
+</script>
+{% endblock post_script %}
