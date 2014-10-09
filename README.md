@@ -1,6 +1,8 @@
 Dataforeninga
 =============
 
+[![Code Health](https://landscape.io/github/jvlomax/dataforeninga/master/landscape.png)](https://landscape.io/github/jvlomax/dataforeninga/master)
+
 This is the webpage for Tromsøstudentenes Datforening
 http://dataforeninga.no
 
