@@ -21,3 +21,7 @@ If you need to work within the virtual enviroment, run activate in the venv/Scri
 
 
 If you have no idea what any of the above means, just open the terminal in the root directory of the project and type `venv/Scripts/python.exe main.py` and navigate to 127.0.0.1:5000
+
+
+
+##Now wtih 100% more githooks###
