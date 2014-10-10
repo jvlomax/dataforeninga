@@ -26,8 +26,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50), nullable=False)
 
 class Servers(db.Model):
-    __bind_key__ = "td"
-    __tablename__ = "servers"
     sid = db.Column(db.Integer, primary_key=True, nullable=False)
     uid = db.Column(db.Integer, nullable=False)
     server_name = db.Column(db.String(20), nullable=False)
