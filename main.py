@@ -25,12 +25,21 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(50), nullable=False)
 
+
 class Servers(db.Model):
     sid = db.Column(db.Integer, primary_key=True, nullable=False)
     uid = db.Column(db.Integer, nullable=False)
     server_name = db.Column(db.String(20), nullable=False)
     ip_address = db.Column(db.String(15), nullable=False)
 
+
+class Members(db.Model):
+    uid = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(15), nullable=False)
+    last_name = db.Column(db.String(15), nullable=False)
+    position = db.Column(db.String(20), nullable=False)
+    phone = db.Column(db.String(15), nullable=True, default=None)
+    mail = db.Column(db.String(30), nullable=False)
 
 db.create_all()
 
