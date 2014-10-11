@@ -1,6 +1,7 @@
 Dataforeninga
 =============
-
+[![Code Health](https://landscape.io/github/jvlomax/dataforeninga/master/landscape.png)](https://landscape.io/github/jvlomax/dataforeninga/master)
+[![Build Status](https://travis-ci.org/jvlomax/dataforeninga.svg?branch=master)](https://travis-ci.org/jvlomax/dataforeninga)
 This is the webpage for Tromsøstudentenes Datforening
 http://dataforeninga.no
 
