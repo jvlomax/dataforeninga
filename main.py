@@ -40,6 +40,7 @@ class Members(db.Model):
     position = db.Column(db.String(20), nullable=False)
     phone = db.Column(db.String(15), nullable=True, default=None)
     mail = db.Column(db.String(30), nullable=False)
+    payed = db.Column(db.Boolean, nullable=False, default=False)
 
 db.create_all()
 
@@ -48,7 +49,9 @@ db_adapter = SQLAlchemyAdapter(db, User)
 user_manager = UserManager(db_adapter, password_validator=password_validator)
 user_manager.init_app(app)
 
-
+"""
+Static public pages
+"""
 @app.route("/")
 @app.route("/index.html")
 def index():
@@ -60,18 +63,42 @@ def index():
 def showStyret():
     return render_template("styret.html")
 
+
+"""
+Dashboard routes
+"""
+
+@app.route("/dashboard/overview.html")
 @app.route("/admin")
-@app.route("/admin.html")
+@app.route("/overview.html")
 def showAdmin():
+    members = Members.query.all()
+    num_members = len(members)
+    payers = len(Members.query.filter_by(payed=True).all())
 
     mock_data = [{"first_name": "Bjarne", "last_name":"Betjent"}, {"first_name":"Max", "last_name":"Mekker"}]
-    return render_template("admin.html", members=mock_data)
+    return render_template("dashboard/overview.html", members=members, num_members=num_members, payers=payers)
 
-@app.route("/servers")
+
+@app.route("/dashboard/members.html")
+def show_dashboard_members():
+    members = Members.query.all()
+    return render_template("dashboard/members.html", members=members)
+
+@app.route("/dashboard/servers.html")
 def showServers():
     servers = Servers.query.all()
-    return render_template("servers.html", servers=servers)
+    return render_template("dashboard/servers.html", servers=servers)
 
+
+@app.route("/dashboard/export.html")
+def export():
+    return render_template("dashboard/export.html")
+
+
+"""
+Error and misc pages
+"""
 
 @app.errorhandler(404)
 def page_not_found(e):

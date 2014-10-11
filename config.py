@@ -7,4 +7,4 @@ USER_ENABLE_EMAIL = True
 SQLALCHEMY_POOL_RECYCLE = 60
 SQLALCHEMY_ECHO = True
 
-SERVER_NAME = "dataforeninga.org"
+#SERVER_NAME = "dataforeninga.org"
