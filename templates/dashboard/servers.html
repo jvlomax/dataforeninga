@@ -1,21 +1,82 @@
-{% extends "base.html" %}
+{% extends "dashboard/base.html" %}
+{% block post_head %}
 
-        {% block content %}
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        {% include "snippets/dashboard_sidebar.html" %}
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">Servers</h1>
 
-        <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Server Name</th>
-                <th>IP </th>
-            </tr>
-        </thead>
-        {%  for server in servers %}
-        <tr>
-            <td>{% server.server_name %}</td>
-            <td>{% server.ip_address %}</td>
-        </tr>
-        {% endfor %}
+            <table class="table table-bordered" id="serverTable">
+                <thead>
+                    <tr>
+                        <th>sid</th>
+                        <th>uid</th>
+                        <th>Server Name</th>
+                        <th>IP</th>
+                        <th>Online</th>
+                    </tr>
+                </thead>
+                {%  for server in servers %}
+                <tr >
+                    <td>{{ server.sid }}</td>
+                    <td>{{ server.uid }}</td>
+                    <td>{{ server.server_name }}</td>
+                    <td class="server-ip" id="{{ server.ip_address }}">{{ server.ip_address }}</td>
+                    <td id="spinner"><i class="fa fa-spinner fa-spin"></i></td>
+
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
 
 
-        </table>
-        {% endblock %}
+{% endblock %}
+{% block post_script %}
+<script>
+    $(document).ready(function(){
+        var table = $("#serverTable");
+        table.find("tr").each(function(i, el){
+            var td = $(this).find("td.server-ip");
+            ip = td.text();
+
+            if(ip) {
+                getStatus(ip);
+
+
+            }
+        });
+
+
+
+    });
+    function getStatus(ip){
+        console.log("ping");
+        $.getJSON("/utils/isonline/" + ip, function(data){
+            var table = $("#serverTable");
+
+            table.find("tr").each(function(i, el) {
+                var td = $(this).find("td.server-ip");
+                if (td.text() == data.address) {
+                    if (data.status == "online") {
+                        var i = $(this).find("td#spinner");
+                        i.removeClass("fa-spin");
+                       // i.addClass("fa-book fa-fw");
+                        $(this).addClass("success");
+                    } else {
+
+                        $(this).addClass("danger");
+                    }
+                }
+            });
+        });
+    }
+
+</script>
+{% endblock %}
+</div>

@@ -1,9 +1,10 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.babel import Babel
 from flask.ext.user import current_user, login_required, UserManager, UserMixin, SQLAlchemyAdapter
 from wtforms.validators import ValidationError
 import config
+from util import isOnline
 #from models.members import Members
 #from models.servers import Servers
 
@@ -104,5 +105,12 @@ Error and misc pages
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
+@app.route("/utils/isonline/<path:ip>")
+def check_server(ip):
+    if isOnline(ip):
+        return jsonify(status="online", address=ip)
+    else:
+        return jsonify(status="offline", address=ip)
 if __name__ == "__main__":
     app.run(debug=True)
