@@ -72,7 +72,7 @@ Dashboard routes
 @app.route("/dashboard/overview.html")
 @app.route("/admin")
 @app.route("/overview.html")
-def showAdmin():
+def dashboard():
     members = Members.query.all()
     num_members = len(members)
     payers = len(Members.query.filter_by(payed=True).all())
@@ -82,12 +82,12 @@ def showAdmin():
 
 
 @app.route("/dashboard/members.html")
-def show_dashboard_members():
+def members():
     members = Members.query.all()
     return render_template("dashboard/members.html", members=members)
 
 @app.route("/dashboard/servers.html")
-def showServers():
+def servers():
     servers = Servers.query.all()
     return render_template("dashboard/servers.html", servers=servers)
 
@@ -108,6 +108,8 @@ def page_not_found(e):
 
 @app.route("/utils/isonline/<path:ip>")
 def check_server(ip):
+
+
     if isOnline(ip):
         return jsonify(status="online", address=ip)
     else:
