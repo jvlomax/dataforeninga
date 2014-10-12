@@ -71,7 +71,6 @@ Dashboard routes
 
 @app.route("/dashboard/overview.html")
 @app.route("/admin")
-@app.route("/overview.html")
 def dashboard():
     members = Members.query.all()
     num_members = len(members)
