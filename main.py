@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, jsonify
+from flask import Flask, render_template, url_for, jsonify, request
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.babel import Babel
 from flask.ext.user import current_user, login_required, UserManager, UserMixin, SQLAlchemyAdapter
@@ -102,8 +102,8 @@ Error and misc pages
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
-
+    #return render_template('404.html'), 404
+    return "this route does not exist{}".format(request.url), 404
 
 @app.route("/utils/isonline/<path:ip>")
 def check_server(ip):
