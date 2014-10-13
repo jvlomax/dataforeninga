@@ -5,14 +5,17 @@ from flask.ext.user import current_user, login_required, UserManager, UserMixin,
 from wtforms.validators import ValidationError
 import config
 from util import isOnline
+import os
 #from models.members import Members
 #from models.servers import Servers
 
 app = Flask(__name__)
 app.config.from_object(config)
-
+if os.environ.get("FLASK_PRODUCTION_CONFIG"):
+    app.config.from_envvar("FLASK_PRODUCTION_CONFIG")
 db = SQLAlchemy(app)
 babel = Babel(app)
+
 
 def password_validator(form, field):
     password = field.data
@@ -103,7 +106,7 @@ Error and misc pages
 @app.errorhandler(404)
 def page_not_found(e):
     #return render_template('404.html'), 404
-    return "this route does not exist{}".format(request.url), 404
+    return "The route {} does not exist".format(request.url), 404
 
 @app.route("/utils/isonline/<path:ip>")
 def check_server(ip):
@@ -114,4 +117,4 @@ def check_server(ip):
     else:
         return jsonify(status="offline", address=ip)
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
