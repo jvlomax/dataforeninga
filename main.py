@@ -103,7 +103,7 @@ Error and misc pages
 @app.errorhandler(404)
 def page_not_found(e):
     #return render_template('404.html'), 404
-    return "this route does not exist{}".format(request.url), 404
+    return "The route {} does not exist. This is an autoupdates main file".format(request.url), 404
 
 @app.route("/utils/isonline/<path:ip>")
 def check_server(ip):
