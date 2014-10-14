@@ -6,7 +6,7 @@ from wtforms.validators import ValidationError
 import config
 from util import isOnline
 import os
-from coverage import coverage
+
 #from models.members import Members
 #from models.servers import Servers
 import random
@@ -146,7 +146,6 @@ def check_server(ip):
     else:
         return jsonify(status="offline", address=ip)
 if __name__ == "__main__":
-    cov = coverage(branch=True)
-    cov.start()
+
+
     app.run()
-    cov.stop()
