@@ -33,7 +33,7 @@
                         </div>
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav">
-                                <li {% if request.path == "/index.html" %} class="active"{% endif %}><a href="{{ url_for("index") }}">Home</a></li>
+                                <li {% if request.path == "/index.html" or request.path == "/" %} class="active"{% endif %}><a href="{{ url_for("index") }}">Home</a></li>
                                 <li {% if request.path == "/styret.html" %} class="active"{% endif %}><a href="{{ url_for("styret") }}">Styret</a></li>
                                 <li {% if request.path == "/om.html" %} class="active"{% endif %}><a href="{{ url_for("om_oss") }}">Om oss</a></li>
                                 <li {% if request.path == "/kontakt.html" %} class="active"{% endif %}><a href="{{ url_for("kontakt") }}">kontakt oss</a></li>
