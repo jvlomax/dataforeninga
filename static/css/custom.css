@@ -27,8 +27,13 @@ article {
     font-family: Consolas, monaco, monospace;
     font-size: 20px;
 }
-article-header{
+.article-header{
     font-family: Consolas, monaco, monospace;
     font-size: 13px;
     font-style: italic;
+}
+
+.col-centered{
+    float:none;
+    margin: 0 auto;
 }
