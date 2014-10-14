@@ -1,21 +1,16 @@
 {% extends "base.html" %}
 
         {% block content %}
-
-        <table class="table table-hover">
+        <p>Følgende er styremedlemmene i Tromsøstudentenes Dataforening</p>
+        <table class="table table-hover table-bordered">
+        {% for member in board_members %}
         <tr>
-            <th>Styreleder</th><th>Einar Kristoffersen</th>
-        </tr>
-        <tr>
-            <th>Nest-Leder</th><th>Harald Arntsen</th>
-        </tr>
-        <tr>
-            <th>sekreter</th><th>Bård Hanssen</th>
-        </tr>
-        <tr>
-            <th>Kasserer</th><th>Jørn Lomax</th>
+            <th>{{ member.position }}</th>
+            <th>{{ member.first_name }} {{ member.last_name }}</th>
+            <th>{{ member.mail |replace("@", " (at) ") }}</th>
         </tr>
 
+        {% endfor %}
         </table>
-        <p>Here you insert stuff</p>
+
         {% endblock %}

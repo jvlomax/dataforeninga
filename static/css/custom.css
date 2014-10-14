@@ -19,3 +19,16 @@
 
 }
 
+body {
+    font-family: "Droid Sans", sans-serif;
+}
+
+article {
+    font-family: Consolas, monaco, monospace;
+    font-size: 20px;
+}
+article-header{
+    font-family: Consolas, monaco, monospace;
+    font-size: 13px;
+    font-style: italic;
+}

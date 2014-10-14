@@ -6,9 +6,10 @@ from wtforms.validators import ValidationError
 import config
 from util import isOnline
 import os
+from coverage import coverage
 #from models.members import Members
 #from models.servers import Servers
-
+import random
 app = Flask(__name__)
 app.config.from_object(config)
 if os.environ.get("FLASK_PRODUCTION_CONFIG"):
@@ -64,9 +65,37 @@ def index():
 
 @app.route("/styret")
 @app.route("/styret.html")
-def showStyret():
-    return render_template("styret.html")
+def styret():
+    board = Members.query.filter(Members.position != "member").all()
+    random.shuffle(board)
+    sorted_board = sorted(board, key=board_sorter)
+    return render_template("styret.html", board_members=sorted_board)
 
+def board_sorter(x):
+    if x.position == "Leader":
+        return 1
+    if x.position == "Deputy":
+        return 2
+    elif x.position == "Economy":
+        return 3
+    elif x.position == "Secretary":
+        return 4
+    elif x.position == "Tech":
+        return 5
+    elif x.position == "Board member":
+        return 6
+    else:
+        return 7
+
+@app.route("/om")
+@app.route("/om.html")
+def om_oss():
+    return render_template("om_oss.html")
+
+@app.route("/kontakt")
+@app.route("/kontakt.html")
+def kontakt():
+    return render_template("kontakt.html")
 
 """
 Dashboard routes
@@ -117,4 +146,7 @@ def check_server(ip):
     else:
         return jsonify(status="offline", address=ip)
 if __name__ == "__main__":
+    cov = coverage(branch=True)
+    cov.start()
     app.run()
+    cov.stop()
