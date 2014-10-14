@@ -7,7 +7,7 @@
         <meta name="description" content="">
         <meta name="author" content="Nissen AS">
 
-        <title>Tromsøstudentenes Dataforening</title>
+        <title>Tromsøstudentenes Dataforening | {{ active_page }}</title>
         <script type="application/javascript" src="{{url_for('static', filename='js/jquery-2.1.1.min.js')}}"></script>
         <script type="application/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
         <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.css')}}">
@@ -33,10 +33,10 @@
                         </div>
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav">
-                                <li {% if request.path == "/index.html" or request.path == "/" %} class="active"{% endif %}><a href="{{ url_for("index") }}">Home</a></li>
+                                <li {% if request.path == "/index.html" or request.path == "/" %} class="active"{% endif %}><a href="{{ url_for("index") }}">Hjem</a></li>
                                 <li {% if request.path == "/styret.html" %} class="active"{% endif %}><a href="{{ url_for("styret") }}">Styret</a></li>
                                 <li {% if request.path == "/om.html" %} class="active"{% endif %}><a href="{{ url_for("om_oss") }}">Om oss</a></li>
-                                <li {% if request.path == "/kontakt.html" %} class="active"{% endif %}><a href="{{ url_for("kontakt") }}">kontakt oss</a></li>
+                                <li {% if request.path == "/kontakt.html" %} class="active"{% endif %}><a href="{{ url_for("kontakt") }}">Kontakt oss</a></li>
                             </ul>
                         </div>
                     </div>
