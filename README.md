@@ -13,4 +13,6 @@ To install all required modules run `pip install -r requirements.txt` in the roo
 If you don't want to install all the modules to your python installation, please use a [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
 
 
-If you are running windows and your're having an error installing py-bcrypt, please run `pip install wheels\py_bcrypt` in the root directory to install it from a cheesewheel
+If you are running windows and your're having an error installing py-bcrypt, please run `pip install wheelhouse\py_bcrypt-0.4-cp[your python 
+version]-none-win32.whl` in the root directory to 
+install it from a cheesewheel
