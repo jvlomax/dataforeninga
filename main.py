@@ -47,6 +47,7 @@ class Members(db.Model):
     mail = db.Column(db.String(30), nullable=False)
     payed = db.Column(db.Boolean, nullable=False, default=False)
 
+
 db.create_all()
 
 

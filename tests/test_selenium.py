@@ -13,9 +13,11 @@ class MyTest(TestCase):
     def setUpClass(cls):
             app.config["DEBUG"] = False
             #app.config["TESTING"] = True
-
+            cls.server_address = "127.0.0.1:3664"
+            app.config["SERVER_NAME"] = cls.server_address
             cls.thread = Thread(target=app.run, name="app", daemon=True)
             cls.thread.start()
+
     def setUp(self):
         self.driver = webdriver.Firefox()
 
@@ -25,7 +27,8 @@ class MyTest(TestCase):
 
 
     def test_menu(self):
-        self.driver.get("http://127.0.0.1:5000/")
+        print(self.server_address)
+        self.driver.get("http://{}".format(self.server_address))
         assert self.driver.title == "Tromsøstudentenes Dataforening | Hjem"
         board_link = self.driver.find_element_by_link_text("Styret")
         board_link.click()
