@@ -20,7 +20,7 @@ class MyTest(TestCase):
 
     def setUp(self):
         self.driver = webdriver.Firefox()
-
+        self.driver.implicitly_wait(200)
 
     def tearDown(self):
         self.driver.quit()
@@ -29,10 +29,13 @@ class MyTest(TestCase):
     def test_menu(self):
         print(self.server_address)
         self.driver.get("http://{}".format(self.server_address))
+
         assert self.driver.title == "Tromsøstudentenes Dataforening | Hjem"
         board_link = self.driver.find_element_by_link_text("Styret")
         board_link.click()
-       # assert self.driver.title == "Tromsøstudentenes Dataforening | Styret"
+
+
+        assert self.driver.title == "Tromsøstudentenes Dataforening | Styret"
         about_link = self.driver.find_element_by_link_text("Om oss")
         about_link.click()
         assert self.driver.title == "Tromsøstudentenes Dataforening | Om oss"
