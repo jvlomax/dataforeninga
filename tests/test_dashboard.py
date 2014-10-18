@@ -76,6 +76,16 @@ class TestServersCase(TestCase):
         self.assertStatus(resp, 200)
         self.assertIn("129.242.219.41", resp.data.decode("utf-8"))
 
+    def test_add_server(self):
+        pass
+
+    def test_remove_server(self):
+        pass
+
+    def test_edit_server(self):
+        pass
+
+
 class TestExport(TestCase):
     def create_app(self):
         app.config["TESTING"]

@@ -23,11 +23,6 @@ class MyTest(TestCase):
     def tearDown(self):
         self.driver.quit()
 
-    def test_server_running(self):
-        print("here")
-        #driver = webdriver.Firefox()
-        self.driver.get("http://127.0.0.1:5000/index.html")
-        assert self.driver.title == "Tromsøstudentenes Dataforening"
 
     def test_menu(self):
         self.driver.get("http://127.0.0.1:5000/")

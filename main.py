@@ -120,6 +120,8 @@ def members():
 @app.route("/dashboard/servers.html")
 def servers():
     servers = Servers.query.all()
+
+
     return render_template("dashboard/servers.html", servers=servers)
 
 
