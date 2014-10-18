@@ -1,41 +1,121 @@
 {% extends "dashboard/base.html" %}
 {% block post_head %}
-    <link rel="stylesheet" href="{{url_for('static', filename='css/font-awesome.css')}}">
+
+
+    <script type="application/javascript" src="{{url_for('static', filename='js/stupidtable.min.js')}}"></script>
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
     <div class="row">
         {% include "snippets/dashboard_sidebar.html" %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h1 class="page-header">Members</h1>
+        <h1 class="page-header">Members &ensp;<a href="#newMemberModal" role="button" data-toggle="modal" class="btn btn-primary">Add member</a></h1>
 
-            <table class="table table-bordered">
+
+            <table id="membersTable" class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>First Name</th>
-                        <th>Last Name </th>
-                        <th>Position</th>
-                        <th>Mail</th>
-                        <th>Phone</th>
-                        <th>payed</th>
+                        <th data-sort="string">First Name </i> </th>
+                        <th data-sort="string">Last Name </th>
+                        <th data-sort="string">Position</th>
+                        <th data-sort="string">Mail</th>
+                        <th data-sort="int">Phone</th>
+                        <th>Payed</th>
                     </tr>
                 </thead>
+                <tbody>
                 {%  for member in members %}
-                <tr {% if member.payed == 0 %} class="danger" {% endif %}>
-                    <td>{{ member.first_name }}</td>
-                    <td>{{ member.last_name }}</td>
-                    <td>{{ member.position }}</td>
-                    <td>{{ member.mail }}</td>
-                    <td>{{ member.phone }}</td>
-                    <td><i {% if member.payed %} class="fa-check" {% else %} class="fa-close" {% endif %}></i></td>
-                </tr>
+                    <tr {% if member.payed == 0 %} class="danger" {% endif %}>
+                        <td>{{ member.first_name }}</td>
+                        <td>{{ member.last_name }}</td>
+                        <td>{{ member.position }}</td>
+                        <td>{{ member.mail }}</td>
+                        <td>{{ member.phone }}</td>
+                        <td><i {% if member.payed %} class="fa-check" {% else %} class="fa-close" {% endif %}></i></td>
+                    </tr>
                 {% endfor %}
+                </tbody>
             </table>
         </div>
 
     </div>
 
 
-{% endblock %}
+    <!-- Modal widget for adding new member -->
+    <div id="newMemberModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="newMemberModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                    <h3 id="newMemerModalLabel">Add new member</h3>
+                </div>
+                <div class="modal-body">
+                    <form id="newMemberForm" class="form" method="POST">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label for="firstNameInput">First Name</label>
+                                <input id="firstNameInput" type="text" class="form-control">
+                            </div>
+                             <div class="form-group">
+                                <label for="lastNameInput">Last Name</label>
+                                <input id="lastNameInput" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="form-group col-lg-offset-2">
+                                <select class="form-control">
+                                    <option>Leader</option>
+                                    <option>Deputy Leader</option>
+                                    <option>Secratary</option>
+                                    <option>Treasurer</option>
+                                    <option>Tech</option>
+                                    <option>Board Member</option>
+                                    <option>Member</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="mailInput" class="col-sm-2 control-label">Mail</label>
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phoneInput">Phone</label>
+                                <input type="tel" class="form-control">
+                            </div>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox">Payed?
+                            </label>
 
+                        </div>
+
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button class="btn btn-primary" data-dismiss="modal" id="newMemberSubmitBtn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block post_script %}
+<script>
+$(document).ready(function(){
+    $("table").stupidtable();
+
+   $("#addMemberBtn").click(function(){
+
+
+    });
+
+
+});
+</script>
+{% endblock %}
 </div>

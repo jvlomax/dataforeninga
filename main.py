@@ -112,6 +112,9 @@ def dashboard():
     mock_data = [{"first_name": "Bjarne", "last_name":"Betjent"}, {"first_name":"Max", "last_name":"Mekker"}]
     return render_template("dashboard/overview.html", members=members, num_members=num_members, payers=payers)
 
+@app.route("/dashboard/articles.html")
+def articles():
+    return render_template("dashboard/articles.html")
 
 @app.route("/dashboard/members.html")
 def members():

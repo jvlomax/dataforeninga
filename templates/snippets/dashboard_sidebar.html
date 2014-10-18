@@ -1,6 +1,7 @@
 <div class="col-sm-3 col-md-2 sidebar">
     <ul class="nav nav-sidebar">
         <li {% if request.path == "/dashboard/overview.html" %} class="active"{% endif %}><a href="{{ url_for("dashboard") }}">Overview</a></li>
+        <li {% if request.path == "/dashboard/articles.html" %} class="active"{% endif %}><a href="{{ url_for("articles") }}">Articles</a></li>
         <li {% if request.path == "/dashboard/members.html" %} class="active"{% endif %}><a href="{{ url_for("members") }}">Members</a></li>
         <li {% if request.path == "/dashboard/servers.html" %} class="active"{% endif %}><a href="{{ url_for("servers") }}">Servers</a></li>
         <li {% if request.path == "/dashboard/export.html" %} class="active"{% endif %}><a href="{{ url_for("export") }}">Export</a></li>

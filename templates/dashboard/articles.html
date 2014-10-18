@@ -1,0 +1,29 @@
+{% extends "dashboard/base.html" %}
+{% block post_head %}
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/summernote.css')}}">
+    <script type="application/javascript" src="{{url_for('static', filename='js/summernote.min.js')}}"></script>
+
+
+{% endblock %}
+{% block content %}
+    {% include "snippets/dashboard_sidebar.html" %}
+<div class="container">
+<h1 class="page-header">Articles</h1>
+    <p><button class="btn btn-primary">Save</button></p>
+    <div id="summernote"></div>
+    </div>
+{% endblock %}
+{% block post_script %}
+<script>
+$(document).ready(function(){
+
+   $("#summernote").summernote({
+       height: 200,
+       minHeight: 150,
+       maxHeight: 600,
+       defaultFontName: "Consolas"
+   });
+});
+</script>
+{% endblock %}
