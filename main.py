@@ -6,6 +6,8 @@ from wtforms.validators import ValidationError
 import config
 from util import isOnline
 import os
+import json
+import datetime
 
 #from models.members import Members
 #from models.servers import Servers
@@ -33,7 +35,7 @@ class User(db.Model, UserMixin):
 
 class Servers(db.Model):
     sid = db.Column(db.Integer, primary_key=True, nullable=False)
-    uid = db.Column(db.Integer, nullable=False)
+    uid = db.Column(db.Integer, db.ForeignKey("members.uid"), nullable=False, )
     server_name = db.Column(db.String(20), nullable=False)
     ip_address = db.Column(db.String(15), nullable=False)
 
@@ -47,6 +49,13 @@ class Members(db.Model):
     mail = db.Column(db.String(30), nullable=False)
     payed = db.Column(db.Boolean, nullable=False, default=False)
 
+
+class Article(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    owner = db.Column(db.Integer, db.ForeignKey("user.id"))
+    date = db.Column(db.DateTime, default=datetime.datetime.now, nullable=False)
 
 db.create_all()
 
@@ -132,6 +141,51 @@ def servers():
 @app.route("/dashboard/export.html")
 def export():
     return render_template("dashboard/export.html")
+
+
+"""
+Ajax routes
+"""
+
+@app.route("/ajax/member/new", methods=["POST"])
+def new_member():
+    data = json.loads(request.data)
+    member = Members(first_name=data["first_name"],
+                     last_name=data["last_name"],
+                     position=data["position"],
+                     phone=data.get("phone"),
+                     mail=data["mail"],
+                     payed=data.get("payed", False))
+    db.session.add(member)
+    db.session.commit()
+
+
+@app.route("/ajax/member/edit", methods=["PUT"])
+def edit_member():
+    pass
+
+@app.route("/ajax/member/delete", methods=["DELETE"])
+def delete_member():
+    pass
+
+
+@app.route("/ajax/server/new", methods=["POST"])
+def new_server():
+    data = json.loads(request.data)
+    server = Servers(server_name=data["server_name"],
+                     ip_address=data["ip_address"],
+                     uid=data["uid"])
+
+    db.session.add(server)
+    db.session.commit()
+
+@app.route("/ajax/server/edit", methods=["PUT"])
+def edit_server():
+    pass
+
+@app.route("/ajax/server/delete", methods=["DELETE"])
+def delete_server():
+    pass
 
 
 """
