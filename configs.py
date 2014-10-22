@@ -1,3 +1,5 @@
+import os
+
 class Config():
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://td:LNWRcTyWEb9XF2cS@129.242.219.41/td"
     JSON_AS_ASCII = False
@@ -15,7 +17,7 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
     SERVER_NAME = "dataforeninga.org"
-    SECRET_KEY = '\xf0\xd0\xe9`\xa9\xdc\xe3\x7fQ\xe2\x8d\xeb\xd7\xc4\xb2C\xa8\xb0\xa0\x91\xb9\xff\x03\x8c'
+    SECRET_KEY = os.urandom(24)
     JSONIFY_PRETTYPRINT_REGULAR = False
     CSRF_ENABLED = True
 
