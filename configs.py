@@ -1,12 +1,12 @@
 import os
 
 class Config():
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://td:LNWRcTyWEb9XF2cS@129.242.219.41/td"
     JSON_AS_ASCII = False
     SECRET_KEY = "SUPER SECRET KEY THAT NO ONE CAN FIND"
 
 
 class DevConfig(Config):
+    SQLALCHEMY_DATABASE_URI = "sqlite:///td.sqlite"
     DEBUG = True
     TESTING = False
     SECRET_KEY = "SUPER SECRET KEY THAT NO ONE CAN FIND"
@@ -14,6 +14,7 @@ class DevConfig(Config):
 
 
 class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://td:LNWRcTyWEb9XF2cS@129.242.219.41/td"
     DEBUG = False
     TESTING = False
     SERVER_NAME = "dataforeninga.org"
@@ -24,8 +25,6 @@ class ProductionConfig(Config):
     USER_ENABLE_EMAIL = True
     USER_ENABLE_USERNAME = False
     USER_ENABLE_REGISTRATION = False
-
-
 
 
 class TestConfig(Config):

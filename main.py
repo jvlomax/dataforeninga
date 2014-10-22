@@ -153,15 +153,26 @@ Ajax routes
 
 @app.route("/ajax/member/new", methods=["POST"])
 def new_member():
-    data = json.loads(request.data)
-    member = Members(first_name=data["first_name"],
-                     last_name=data["last_name"],
-                     position=data["position"],
-                     phone=data.get("phone"),
-                     mail=data["mail"],
-                     payed=data.get("payed", False))
-    db.session.add(member)
-    db.session.commit()
+
+    form_data = request.get_json()
+    payed = form_data.get("payed", False)
+    if payed:
+        payed = True
+    print(form_data)
+    try:
+        member = Members(first_name=form_data["first_name"],
+                        last_name=form_data["last_name"],
+                        position=form_data["position"],
+                        phone=form_data.get("phone"),
+                        mail=form_data["mail"],
+                        payed=payed)
+    except KeyError:
+        return jsonify({"status" : "400", "error" : "KeyError"}), 400
+    except:
+        return jsonify({"status" : "400", "error" : "Unknown Error"}), 400
+    #db.session.add(member)
+    #db.session.commit()
+    return jsonify({"status" : "Success"}), 200
 
 
 @app.route("/ajax/member/edit", methods=["PUT"])

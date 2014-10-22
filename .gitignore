@@ -55,3 +55,6 @@ docs/_build/
 target/
 
 .idea/
+
+# Test databse
+tests/*.db
