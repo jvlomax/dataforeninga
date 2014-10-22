@@ -3,7 +3,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.babel import Babel
 from flask.ext.user import current_user, login_required, UserManager, UserMixin, SQLAlchemyAdapter
 from wtforms.validators import ValidationError
-import config
+import configs
 from util import isOnline
 import os
 import json
@@ -13,9 +13,14 @@ import datetime
 #from models.servers import Servers
 import random
 app = Flask(__name__)
-app.config.from_object(config)
-if os.environ.get("FLASK_PRODUCTION_CONFIG"):
-    app.config.from_envvar("FLASK_PRODUCTION_CONFIG")
+
+if os.environ.get("FLASK_PRODUCTION"):
+    app.config.from_object(configs.ProductionConfig)
+elif os.environ.get("FLASK_TRAVIS_TESTING"):
+    app.config.from_object(configs.TravisTestingConfig)
+else:
+    app.config.from_object(configs.DevConfig)
+
 db = SQLAlchemy(app)
 babel = Babel(app)
 
@@ -57,8 +62,10 @@ class Article(db.Model):
     owner = db.Column(db.Integer, db.ForeignKey("user.id"))
     date = db.Column(db.DateTime, default=datetime.datetime.now, nullable=False)
 
-db.create_all()
 
+
+
+db.create_all()
 
 db_adapter = SQLAlchemyAdapter(db, User)
 user_manager = UserManager(db_adapter, password_validator=password_validator)

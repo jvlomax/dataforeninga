@@ -2,8 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from unittest import TestCase
 from flask import url_for
-
-from main import app
+import configs
+from main import app, db
 import requests
 from threading import Thread
 
@@ -11,7 +11,8 @@ class MyTest(TestCase):
 
     @classmethod
     def setUpClass(cls):
-            app.config["DEBUG"] = False
+            app.config.from_object(configs.TestConfig)
+            #db.create_all()
             #app.config["TESTING"] = True
             cls.server_address = "127.0.0.1:3664"
             app.config["SERVER_NAME"] = cls.server_address
@@ -21,10 +22,12 @@ class MyTest(TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(20000)
-
+        print("before create all")
+        db.create_all()
+        print("after create all")
     def tearDown(self):
         self.driver.quit()
-
+        db.drop_all()
 
     def test_menu(self):
         print(self.server_address)

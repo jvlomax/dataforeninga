@@ -7,7 +7,7 @@ class MainTestCase(unittest.TestCase):
 
     def setUp(self):
         self.db_fd, main.app.config["DATABASE"] = tempfile.mkstemp()
-        main.app.config["TESTING"] = True
+
         self.app = main.app.test_client()
         #main.init_db()
 

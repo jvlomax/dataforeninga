@@ -1,10 +1,11 @@
 import unittest
 from main import db, app, Members
 from flask.ext.testing import TestCase
+import configs
 class DatabaseTest(TestCase):
 
     def create_app(self):
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
+        app.config.from_object(configs.TestConfig)
         return app
 
     def setUp(self):
