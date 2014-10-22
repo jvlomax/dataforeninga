@@ -29,7 +29,9 @@ def password_validator(form, field):
     password = field.data
     if len(password) < 4:
         raise ValidationError(_("Password must be at least 4 characters"))
-
+"""
+Database declarations
+"""
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -79,7 +81,6 @@ Static public pages
 def index():
     return render_template("index.html")
 
-
 @app.route("/styret")
 @app.route("/styret.html")
 def styret():
@@ -124,8 +125,6 @@ def dashboard():
     members = Members.query.all()
     num_members = len(members)
     payers = len(Members.query.filter_by(payed=True).all())
-
-    mock_data = [{"first_name": "Bjarne", "last_name":"Betjent"}, {"first_name":"Max", "last_name":"Mekker"}]
     return render_template("dashboard/overview.html", members=members, num_members=num_members, payers=payers)
 
 @app.route("/dashboard/articles.html")
@@ -140,8 +139,6 @@ def members():
 @app.route("/dashboard/servers.html")
 def servers():
     servers = Servers.query.all()
-
-
     return render_template("dashboard/servers.html", servers=servers)
 
 
@@ -206,13 +203,9 @@ def page_not_found(e):
 
 @app.route("/utils/isonline/<path:ip>")
 def check_server(ip):
-
-
     if isOnline(ip):
         return jsonify(status="online", address=ip)
     else:
         return jsonify(status="offline", address=ip)
 if __name__ == "__main__":
-
-
     app.run()
