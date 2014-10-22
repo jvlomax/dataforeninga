@@ -16,3 +16,10 @@ If you don't want to install all the modules to your python installation, please
 If you are running windows and your're having an error installing py-bcrypt, please run `pip install wheelhouse\py_bcrypt-0.4-cp[your python 
 version]-none-win32.whl` in the root directory to 
 install it from a cheesewheel
+
+
+Before commiting
+============
+Always run the tests befor commiting. To test all the tests run `nosetests` in the root folder
+
+If you are using pycharm you can also right click the "tests" folder and select "run unittsests" to run all the tests

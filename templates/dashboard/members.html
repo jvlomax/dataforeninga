@@ -9,7 +9,11 @@
     <div class="row">
         {% include "snippets/dashboard_sidebar.html" %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h1 class="page-header">Members &ensp;<a href="#newMemberModal" role="button" data-toggle="modal" class="btn btn-primary">Add member</a></h1>
+        <h1 class="page-header">Members &ensp;
+            <a href="#newMemberModal" role="button" data-toggle="modal" class="btn btn-primary">Add member</a>
+             <a href="mailto:{% for member in members %}{{ member.mail }},{% endfor %}" role="button" class="btn btn-primary">Email all members</a>
+
+        </h1>
 
 
             <table id="membersTable" class="table table-bordered">
