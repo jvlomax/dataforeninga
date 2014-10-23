@@ -6,7 +6,7 @@ class Config():
 
 
 class DevConfig(Config):
-    SQLALCHEMY_DATABASE_URI = "sqlite:///td.sqlite"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///td.db"
     DEBUG = True
     TESTING = False
     SECRET_KEY = "SUPER SECRET KEY THAT NO ONE CAN FIND"

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, jsonify, request
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
 from flask.ext.babel import Babel
 from flask.ext.user import current_user, login_required, UserManager, UserMixin, SQLAlchemyAdapter
 from wtforms.validators import ValidationError
@@ -48,6 +49,7 @@ class Servers(db.Model):
 
 
 class Members(db.Model):
+    #__table_args__= {"sqlite_autoincrement": True}
     uid = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(15), nullable=False)
     last_name = db.Column(db.String(15), nullable=False)
@@ -168,10 +170,12 @@ def new_member():
                         payed=payed)
     except KeyError:
         return jsonify({"status" : "400", "error" : "KeyError"}), 400
+    except IntegrityError:
+        return jsonify({"status": "500", "error": "Error on commit"}), 500
     except:
         return jsonify({"status" : "400", "error" : "Unknown Error"}), 400
-    #db.session.add(member)
-    #db.session.commit()
+    db.session.add(member)
+    db.session.commit()
     return jsonify({"status" : "Success"}), 200
 
 
