@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for, jsonify, request
+from __future__ import print_function
+from flask import Flask, render_template, url_for, jsonify, request, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
 from flask.ext.babel import Babel
@@ -181,11 +182,35 @@ def new_member():
 
 @app.route("/ajax/member/edit", methods=["PUT"])
 def edit_member():
-    pass
+    data = request.get_json()
+    member = Members.query.get(data["uid"])
+    member.first_name = data["first_name"]
+    member.last_name = data["last_name"]
+    member.position = data["position"]
+    member.mail = data["mail"]
+    member.phone = data["phone"]
+    member.payed = data["payed"]
+    db.session.commit()
+
+    flash("Member successfully updated")
+    ret_data = {"status": 200, "msg":"succes", "uid": data["uid"]}
+    return jsonify(ret_data)
+
+
 
 @app.route("/ajax/member/delete", methods=["DELETE"])
 def delete_member():
-    pass
+    data = request.get_json()
+    print(data)
+    member = Members.query.get(int(data["uid"]))
+    try:
+        db.session.delete(member)
+        db.session.commit()
+        ret_data = {"status" : 200, "msg": "member succesfully deleted"}
+    except IntegrityError:
+        ret_data = {"status" : 500, "msg": "error deleteing from db"}
+
+    return jsonify(ret_data), ret_data["status"]
 
 
 @app.route("/ajax/server/new", methods=["POST"])

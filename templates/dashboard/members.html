@@ -14,11 +14,18 @@
              <a href="mailto:{% for member in members %}{{ member.mail }},{% endfor %}" role="button" class="btn btn-primary">Email all members</a>
 
         </h1>
-
-
-            <table id="membersTable" class="table table-bordered">
+            <div class="col-centered">
+                <div id="updateSucessAlert" class="alert alert-success hidden-alert" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    Member successfully updated
+                </div>
+            </div>
+            <table id="membersTable" class="table table-bordered table-responsive table-dashboard">
                 <thead>
                     <tr>
+
                         <th data-sort="string">First Name </i> </th>
                         <th data-sort="string">Last Name </th>
                         <th data-sort="string">Position</th>
@@ -29,14 +36,28 @@
                 </thead>
                 <tbody>
                 {%  for member in members %}
-                    <tr {% if member.payed == 0 %} class="danger" {% endif %}>
-                        <td id="first_name">{{ member.first_name }}</td>
-                        <td id="last_name">{{ member.last_name }}</td>
-                        <td id="position">{{ member.position }}</td>
-                        <td id="mail">{{ member.mail }}</td>
-                        <td id="phone">{{ member.phone }}</td>
-                        <td id="payed"><input type="checkbox" {% if member.payed %} checked{% endif %} disabled> </td>
+                    <tr id="{{ member.uid }}"{% if member.payed == 0 %} class="danger" {% endif %}>
+
+                        <td name="first_name" id="first_name">{{ member.first_name }}</td>
+                        <td name="last_name" id="last_name">{{ member.last_name }}</td>
+                        <td name="position" id="position">{{ member.position }}</td>
+                        <td name="mail" id="mail">{{ member.mail }}</td>
+                        <td name="phone" id="phone">{{ member.phone }}</td>
+                        <td name="payed" id="payed"><input  class="checkbox" type="checkbox" {% if member.payed %} checked{% endif %} disabled> </td>
+
+                        <td id="table-icons">
+                           <div class="btn-group">
+                                <button type="button" class="btn btn-default edit-button">
+                                    <span class="fa fa-edit"></span>
+                                </button>
+                                <button  type="Button" class="btn btn-default delete-button">
+                                    <span  class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </div>
+                        </td>
+
                     </tr>
+
                 {% endfor %}
                 </tbody>
             </table>
@@ -92,12 +113,8 @@
                             <label>
                                 <input type="checkbox" name="payed">Payed?
                             </label>
-
                         </div>
-
-
                     </form>
-
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
@@ -113,10 +130,11 @@
 <script>
 $(document).ready(function(){
     var selected = null;
+    window.editing = false;
     $("table").stupidtable();
 
+    /* New member button */
     $("#newMemberSubmitBtn").click(function(){
-
         var form = JSON.stringify($('form').serializeObject());
         console.log(form);
         $.ajax({
@@ -141,67 +159,175 @@ $(document).ready(function(){
                     console.log("KeyError");
                 }
             }
+        });
+    });
+
+
+    /*Edit row Button */
+    $(".edit-button").click(function(){
+
+        if(!window.editing) {
+            var icon = $(this).children().first();
+            icon.toggleClass("fa-edit");
+            icon.toggleClass("fa");
+            icon.toggleClass("glyphicon");
+            icon.toggleClass("glyphicon-floppy-disk");
+            console.log(icon);
+
+
+            var row = $(this).closest("tr");
+            window.editing = row.attr("id");
+            row.children().each(function () {
+                row_name = $(this).attr("name");
+                switch (row_name) {
+                    case "first_name":
+                        $(this).html('<input name="first_name" class="form-control" type="text" value="' + $(this).text() + '">');
+                        break;
+                    case "last_name":
+                        $(this).html('<input name="last_name" class="form-control" type="text" value="' + $(this).text() + '">');
+                        break;
+                    case "position":
+                        var selected_position = $(this).text();
+                        console.log(selected_position);
+                        $(this).html('<select name="position" class="form-control" name="position">' +
+                                '<option value="Leader">Leader</option>' +
+                                '<option value="Deputy">Deputy</option>' +
+                                '<option value="Secratary">Secratary</option>' +
+                                '<option value="Treasurer">Treasurer</option>' +
+                                '<option value="Tech">Tech</option>' +
+                                '<option value="Board member">Board Member</option>' +
+                                '<option value="member">member</option>' +
+                                '</select>');
+                        $(this).children("select").val(selected_position);
+                        //console.log($(this).children("select").val(selected_position));
+                        break;
+                    case "mail":
+                        $(this).html('<input name="mail" class="form-control" type="email" value="' + $(this).text() + '">');
+                        break;
+                    case "phone":
+                        $(this).html('<input name="phone" class="form-control" type="tel" value="' + $(this).text() + '">');
+                        break;
+                    case "payed":
+                        $(this).children().first().removeAttr("disabled");
+                }
+            });
+
+        }else{
+            console.log(window.editing);
+            var row = $(this).closest("tr");
+            if(row.attr("id") != window.editing){
+                return;
+            }
+            var data = {};
+            data.uid = row.attr("id");
+            row.children().each(function () {
+                var row_name = $(this).attr("name");
+                switch(row_name){
+                    case "first_name":
+                        var text = $(this).children().first().val();
+                        $(this).html("");
+                        $(this).text(text);
+                        data.first_name = text;
+                        break;
+                    case "last_name":
+                        var text = $(this).children().first().val();
+                        $(this).html("");
+                        $(this).text(text);
+                        data.last_name = text;
+                        break;
+                    case "position":
+                        var text = $(this).children().first().find(":selected").text();
+                        $(this).html("");
+                        $(this).text(text);
+                        data.position = text;
+                        break;
+                    case "mail":
+                        var text = $(this).children().first().val();
+                        $(this).html("");
+                        $(this).text(text);
+                        data.mail = text;
+                        break;
+                    case "phone":
+                        var text = $(this).children().first().val();
+                        $(this).html("");
+                        $(this).text(text);
+                        data.phone = text;
+                        break;
+                    case "payed":
+                        if($(this).children().first().prop("checked")){
+                            data.payed = 1;
+                        }else{
+                            data.payed = 0;
+                        }
+                        $(this).children().first().attr("disabled", true);
+                        break;
+                }
+            });
+            $.ajax({
+                url: "/ajax/member/edit",
+                dataType: "json",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function(data){
+                    var row = $("#" + data.uid);
+                    var icons = row.find("#table-icons");
+                    var editButton = row.find(".edit-button").children().first();
+                    editButton.toggleClass("fa-edit");
+                    editButton.toggleClass("fa");
+                    editButton.toggleClass("glyphicon");
+                    editButton.toggleClass("glyphicon-floppy-disk");
+                    $("#updateSucessAlert").show();
+                    window.editing = null;
+                },
+                error: function(data){
+                    console.log("error");
+                    window.editing = false;
+                }
+            });
+        }
+    });
+
+
+
+    /*Delete row Button */
+    $(".delete-button").click(function() {
+        window.rowClicked = $(this).closest("tr").attr("id");
+        sweetAlert({
+                    title: "Are you sure?",
+                    text: "The database has no backups",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6855",
+                    confirmButtonText: "Go ahead punk, make my day",
+                    closeOnConfirm: false
+
+                },
+                function () {
+
+                    $.ajax({
+                            url: "/ajax/member/delete",
+                            contentType: "application/json",
+                            data: '{"uid" : "' + window.rowClicked + '"}',
+                            dataType: "json",
+                            type: "DELETE",
+                        success: function(){
+                            sweetAlert("Succesfully deleted", "This person is now lost forever", "success");
+                            $("table#membersTable tr#" + window.rowClicked).remove();
+                            window.rowClicked = null;
+                        },
+                        error: function(){
+                            sweetAlert("There was an error deleting the member", "error");
+                            window.rowClicked = null;
+                        }
+                    });
+
+                });
 
         });
 
 
-
-
-    });
-
-
-    function clickListener(e){
-        console.log(e);
-        if(selected != null){
-            console.log(selected);
-            var input = selected.children().first();
-             var text = input.val();
-            selected.text(text);
-             selected = null;
-        }
-    }
-
-    $("td").dblclick(function(){
-        if(selected != null){
-            return;
-        }
-        var td_id = $(this).attr("id")
-        switch(td_id){
-            case "first_name":
-            case "last_name":
-                $(this).html('<input type="text" value="' + $(this).text() + '"/>');
-                break;
-            case "mail":
-                $(this).html('<input type="email" value="' + $(this).text() + '"/>');
-                break;
-            case "phone":
-                $(this).html('<input type="tel" value="' + $(this).text() + '"/>');
-                break;
-            case "position":
-                 //$(this).html('<select> <option value=Lead> type="text" value="' + $(this).text() + '"/>');
-                break;
-            case "payed":
-                $(this).children().first().removeAttr("disabled");
-                break;
-        }
-
-        console.log("double click");
-
-        selected = $(this);
-        $(this).children().first().focus();
-        $(document).click(clickListener)
-        $(this).children().first().keypress(function(e){
-           if(e.which == 13){
-               var text = $(this).val();
-               $(this).parent().text(text);
-               selected = null;
-           }
-        });
-
-    });
-
-
-
+    /* auto moveable modal */
     function adjustModalMaxHeightAndPosition(){
       $('.modal').each(function(){
         if($(this).hasClass('in') === false){
@@ -232,9 +358,7 @@ $(document).ready(function(){
     }
 
 
-
-
-
+    /*Serialize form to object */
     $.fn.serializeObject = function(){
         var o = {};
         var a = this.serializeArray();

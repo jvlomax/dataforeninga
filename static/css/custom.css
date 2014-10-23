@@ -55,3 +55,21 @@ article {
     width: 100%;
   }
 }
+
+.table-dashboard {
+    border-right: none;
+    border-bottom: none
+}
+
+td#table-icons {
+    background-color: white;
+    border: none;
+}
+
+#table-icons i {
+    padding-left: 10px;
+}
+
+.hidden-alert {
+    display: none;
+}
