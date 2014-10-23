@@ -34,6 +34,7 @@ class TestOverviewCase(TestCase):
     def test_charts(self):
      pass
 
+
 class TestMembersCase(TestCase):
 
     def create_app(self):
@@ -43,7 +44,11 @@ class TestMembersCase(TestCase):
 
     def setUp(self):
         db.create_all()
-        member = Members(first_name="Bjarne", last_name="Betjent", position="member", phone="666", mail="bjarne@betjent.com")
+        member = Members(first_name="Bjarne",
+                         last_name="Betjent",
+                         position="member",
+                         phone="666",
+                         mail="bjarne@betjent.com")
         db.session.add(member)
         db.session.commit()
 
@@ -56,6 +61,34 @@ class TestMembersCase(TestCase):
         resp = self.client.get("dashboard/members.html")
         self.assertStatus(resp, 200)
         self.assertIn("Bjarne", resp.data.decode("utf-8"))
+
+    def test_add_member(self):
+        resp = self.client.get("dashboard/members.html")
+        self.assertNotIn("Max@mekker", resp.data.decode("utf-8"))
+        member = Members(first_name="Max",
+                         last_name="Mekker",
+                         position="Leader",
+                         phone="333",
+                         mail="max@mekker.no")
+        db.session.add(member)
+        db.session.commit()
+        resp = self.client.get("dashboard/members.html")
+        self.assertIn("Max", resp.data.decode("utf-8"))
+
+    def test_remove_member(self):
+        bjarne = Members.query.filter_by(first_name='Bjarne').first()
+        db.session.delete(bjarne)
+        db.session.commit()
+        resp = self.client.get("dashboard/members.html")
+        self.assertNotIn("Bjarne", resp.data.decode("utf-8"))
+
+    def test_edit_member(self):
+        bjarne = Members.query.filter_by(first_name="Bjarne").first()
+        bjarne.mail = "ilovepenis@ss.no"
+        db.session.commit()
+        resp = self.client.get("dashboard/members.html")
+        self.assertNotIn("bjarne@betjent.com", resp.data.decode("utf-8"))
+        self.assertIn("ilovepenis@ss.no", resp.data.decode("utf-8"))
 
 class TestServersCase(TestCase):
     def create_app(self):

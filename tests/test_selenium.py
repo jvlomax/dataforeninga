@@ -21,7 +21,7 @@ class MyTest(TestCase):
 
     def setUp(self):
         self.driver = webdriver.Firefox()
-        self.driver.implicitly_wait(20000)
+        self.driver.implicitly_wait(10)
         print("before create all")
         db.create_all()
         print("after create all")
@@ -60,3 +60,8 @@ class MyTest(TestCase):
 
 #    def test_contact(self):
 
+    def test_member(self):
+        self.driver.get("http://{}/{}".format(self.server_address, "dashboard/members.html"))
+        #self.driver.get("http://{}".format(self.server_address))
+        add_member_button = self.driver.find_element_by_id("addMemberBtn")
+        add_member_button.click()
