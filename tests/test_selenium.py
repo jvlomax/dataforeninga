@@ -59,7 +59,7 @@ class MyTest(TestCase):
 
 
 #    def test_contact(self):
-
+"""
     def test_member(self):
         self.driver.get("http://{}/{}".format(self.server_address, "dashboard/members.html"))
         #self.driver.get("http://{}".format(self.server_address))
@@ -76,3 +76,4 @@ class MyTest(TestCase):
         f_nameInput.send_keys("John")
         l_nameInput.send_keys("Doe")
 
+"""
