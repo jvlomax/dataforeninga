@@ -65,12 +65,14 @@ class MyTest(TestCase):
         #self.driver.get("http://{}".format(self.server_address))
         add_member_button = self.driver.find_element_by_id("addMemberBtn")
         add_member_button.click()
-        modal = self.driver.switch_to.active_element
+        modal_element = self.driver.find_element_by_id("newMemberModal")
+        modal = self.driver.switch_to.frame(modal_element)
+
         f_nameInput = modal.find_element_by_id("firstNameInput")
         print(f_nameInput)
         l_nameInput = modal.find_element_by_id("lastNameInput")
-        positionSelect = modal.driver.find_element_by_id("positionSelect")
-
+        positionSelect = modal.find_element_by_id("positionSelect")
+        f_nameInput.click()
         f_nameInput.send_keys("John")
         l_nameInput.send_keys("Doe")
 

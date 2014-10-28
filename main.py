@@ -58,7 +58,7 @@ class Members(db.Model):
     phone = db.Column(db.String(15), nullable=True, default=None)
     mail = db.Column(db.String(30), nullable=False)
     payed = db.Column(db.Boolean, nullable=False, default=False)
-
+    servers = db.relationship(Servers, lazy=True, backref="owner")
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -141,8 +141,9 @@ def members():
 
 @app.route("/dashboard/servers.html")
 def servers():
+    members = Members.query.all()
     servers = Servers.query.all()
-    return render_template("dashboard/servers.html", servers=servers)
+    return render_template("dashboard/servers.html", servers=servers, members=members)
 
 
 @app.route("/dashboard/export.html")
@@ -153,6 +154,10 @@ def export():
 """
 Ajax routes
 """
+@app.route("/ajax/members", methods=["GET"])
+def get_members():
+    members = Members.query.all()
+    return json.dumps(serialize_query(members), ensure_ascii=False)
 
 @app.route("/ajax/member/new", methods=["POST"])
 def new_member():
@@ -223,9 +228,11 @@ def new_server():
     db.session.add(server)
     db.session.commit()
 
+
 @app.route("/ajax/server/edit", methods=["PUT"])
 def edit_server():
     pass
+
 
 @app.route("/ajax/server/delete", methods=["DELETE"])
 def delete_server():
@@ -236,10 +243,12 @@ def delete_server():
 Error and misc pages
 """
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     #return render_template('404.html'), 404
     return "The route {} does not exist".format(request.url), 404
+
 
 @app.route("/utils/isonline/<path:ip>")
 def check_server(ip):
@@ -247,5 +256,29 @@ def check_server(ip):
         return jsonify(status="online", address=ip)
     else:
         return jsonify(status="offline", address=ip)
+
+
+@app.before_request
+def ajax_only_local():
+    print("before request")
+    if "/ajax/" in request.url:
+        print("ajax found")
+        src = request.headers.get("host")
+        if(":") in src:
+            src = src.split(":")[0]
+        print(src)
+        if src != "127.0.0.1" and src != "localhost":
+            return "Computer says no"
+
+
+def serialize_query(query_object):
+    result = []
+    for row in query_object:
+        row_dict = {}
+        for column in row.__table__.columns:
+            row_dict[column.name] = str(getattr(row, column.name))
+        result.append(row_dict)
+        print(result)
+    return result
 if __name__ == "__main__":
     app.run()

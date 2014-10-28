@@ -8,13 +8,15 @@
     <div class="row">
         {% include "snippets/dashboard_sidebar.html" %}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h1 class="page-header">Servers</h1>
+        <h1 class="page-header">Servers
+            <a href="#newServerModal" role="button" data-toggle="modal" class="btn btn-primary" id="addServerBtn">Add Server</a>
+        </h1>
 
-            <table class="table table-bordered" id="serverTable">
+            <table class="table table-bordered table-dashboard" id="serverTable">
                 <thead>
                     <tr>
-                        <th>sid</th>
-                        <th>uid</th>
+                        <th>id</th>
+                        <th>Owner</th>
                         <th>Server Name</th>
                         <th>IP</th>
                         <th>Online</th>
@@ -22,19 +24,28 @@
                 </thead>
                 {%  for server in servers %}
                 <tr >
-                    <td>{{ server.sid }}</td>
-                    <td>{{ server.uid }}</td>
-                    <td>{{ server.server_name }}</td>
-                    <td class="server-ip" id="{{ server.ip_address }}">{{ server.ip_address }}</td>
+                    <td name="sid">{{ server.sid }}</td>
+                    <td name="owner">{{ server.owner.first_name }} {{  server.owner.last_name}}</td>
+                    <td name="server_name">{{ server.server_name }}</td>
+                    <td name="ip_address" class="server-ip" id="{{ server.ip_address }}">{{ server.ip_address }}</td>
                     <td id="spinner"><i class="fa fa-spinner fa-spin"></i></td>
-
+                    <td id="table-icons">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default edit-button">
+                                <span class="fa fa-edit"></span>
+                            </button>
+                            <button type="button" class="btn btn-default delete-button">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
 
     </div>
-
+    {% include "snippets/new_server_modal.html" %}
 
 {% endblock %}
 {% block post_script %}
@@ -52,9 +63,162 @@
             }
         });
 
+    /*Edit row Button */
+    $(".edit-button").click(function(){
 
+        if(!window.editing) {
+            var icon = $(this).children().first();
+            icon.toggleClass("fa-edit");
+            icon.toggleClass("fa");
+            icon.toggleClass("glyphicon");
+            icon.toggleClass("glyphicon-floppy-disk");
+            console.log(icon);
+
+
+            var row = $(this).closest("tr");
+            window.editing = row.attr("id");
+            row.children().each(function () {
+                row_name = $(this).attr("name");
+                switch (row_name) {
+                    case "owner":
+                        $.getJSON("/ajax/members")
+                        var selected_position = $(this).text();
+                        console.log(selected_position);
+                        $(this).html('<select name="position" class="form-control" name="position">' +
+                                '<option value="Leader">Leader</option>' +
+                                '<option value="Deputy">Deputy</option>' +
+                                '<option value="Secratary">Secratary</option>' +
+                                '<option value="Treasurer">Treasurer</option>' +
+                                '<option value="Tech">Tech</option>' +
+                                '<option value="Board member">Board Member</option>' +
+                                '<option value="member">member</option>' +
+                                '</select>');
+                        $(this).children("select").val(selected_position);
+                        //console.log($(this).children("select").val(selected_position));
+                        break;
+                    case "server_name":
+                        $(this).html('<input name="text" class="form-control" type="email" value="' + $(this).text() + '">');
+                        break;
+                    case "ip_address":
+                        $(this).html('<input name="text" class="form-control" type="tel" value="' + $(this).text() + '">');
+                        break;
+                }
+            });
+
+        }else{
+            console.log(window.editing);
+            var row = $(this).closest("tr");
+            if(row.attr("id") != window.editing){
+                return;
+            }
+            var data = {};
+            data.uid = row.attr("id");
+            row.children().each(function () {
+                var row_name = $(this).attr("name");
+                switch(row_name){
+                    case "first_name":
+                        var text = $(this).children().first().val();
+                        $(this).html("");
+                        $(this).text(text);
+                        data.first_name = text;
+                        break;
+                    case "last_name":
+                        var text = $(this).children().first().val();
+                        $(this).html("");
+                        $(this).text(text);
+                        data.last_name = text;
+                        break;
+                    case "position":
+                        var text = $(this).children().first().find(":selected").text();
+                        $(this).html("");
+                        $(this).text(text);
+                        data.position = text;
+                        break;
+                    case "mail":
+                        var text = $(this).children().first().val();
+                        $(this).html("");
+                        $(this).text(text);
+                        data.mail = text;
+                        break;
+                    case "phone":
+                        var text = $(this).children().first().val();
+                        $(this).html("");
+                        $(this).text(text);
+                        data.phone = text;
+                        break;
+                    case "payed":
+                        if($(this).children().first().prop("checked")){
+                            data.payed = 1;
+                        }else{
+                            data.payed = 0;
+                        }
+                        $(this).children().first().attr("disabled", true);
+                        break;
+                }
+            });
+            $.ajax({
+                url: "/ajax/member/edit",
+                dataType: "json",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function(data){
+                    var row = $("#" + data.uid);
+                    var icons = row.find("#table-icons");
+                    var editButton = row.find(".edit-button").children().first();
+                    editButton.toggleClass("fa-edit");
+                    editButton.toggleClass("fa");
+                    editButton.toggleClass("glyphicon");
+                    editButton.toggleClass("glyphicon-floppy-disk");
+                    $("#updateSucessAlert").show();
+                    window.editing = null;
+                },
+                error: function(data){
+                    console.log("error");
+                    window.editing = false;
+                }
+            });
+        }
+    });
+
+
+    /* Delete row button */
+     $(".delete-button").click(function() {
+    window.rowClicked = $(this).closest("tr").attr("id");
+    sweetAlert({
+                title: "Are you sure?",
+                text: "The database has no backups",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6855",
+                confirmButtonText: "Go ahead punk, make my day",
+                closeOnConfirm: false
+
+            },
+            function () {
+
+                $.ajax({
+                        url: "/ajax/member/delete",
+                        contentType: "application/json",
+                        data: '{"sid" : "' + window.rowClicked + '"}',
+                        dataType: "json",
+                        type: "DELETE",
+                    success: function(){
+                        sweetAlert("Succesfully deleted", "This server no longer exists in our records", "success");
+                        $("table#membersTable tr#" + window.rowClicked).remove();
+                        window.rowClicked = null;
+                    },
+                    error: function(){
+                        sweetAlert("There was an error deleting the server entry", "error");
+                        window.rowClicked = null;
+                    }
+                });
+
+            });
 
     });
+
+});
     function getStatus(ip){
         console.log("ping");
         $.getJSON("/utils/isonline/" + ip, function(data){
