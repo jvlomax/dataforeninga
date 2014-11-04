@@ -221,17 +221,18 @@
 });
     function getStatus(ip){
         console.log("ping");
-        $.getJSON("/utils/isonline/" + ip, function(data){
+        $.getJSON("/ajax/servers/online", function(data){
             var table = $("#serverTable");
-
+            console.log(data);
+           // data.each(function(i, el){
+           //     console.log(el);
+           // });
             table.find("tr").each(function(i, el) {
                 var td = $(this).find("td.server-ip");
                 if (td.text() == data.address) {
                     if (data.status == "online") {
-                        var i = $(this).find("td#spinner");
-                        i.removeClass("fa-spin");
-                       // i.addClass("fa-book fa-fw");
-                        $(this).addClass("success");
+
+
                     } else {
 
                         $(this).addClass("danger");

@@ -58,7 +58,7 @@ class Members(db.Model):
     phone = db.Column(db.String(15), nullable=True, default=None)
     mail = db.Column(db.String(30), nullable=False)
     payed = db.Column(db.Boolean, nullable=False, default=False)
-    servers = db.relationship(Servers, lazy=True, backref="owner")
+
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -141,9 +141,8 @@ def members():
 
 @app.route("/dashboard/servers.html")
 def servers():
-    members = Members.query.all()
     servers = Servers.query.all()
-    return render_template("dashboard/servers.html", servers=servers, members=members)
+    return render_template("dashboard/servers.html", servers=servers)
 
 
 @app.route("/dashboard/export.html")
@@ -154,10 +153,6 @@ def export():
 """
 Ajax routes
 """
-@app.route("/ajax/members", methods=["GET"])
-def get_members():
-    members = Members.query.all()
-    return json.dumps(serialize_query(members), ensure_ascii=False)
 
 @app.route("/ajax/member/new", methods=["POST"])
 def new_member():
@@ -228,11 +223,9 @@ def new_server():
     db.session.add(server)
     db.session.commit()
 
-
 @app.route("/ajax/server/edit", methods=["PUT"])
 def edit_server():
     pass
-
 
 @app.route("/ajax/server/delete", methods=["DELETE"])
 def delete_server():
@@ -243,12 +236,24 @@ def delete_server():
 Error and misc pages
 """
 
-
 @app.errorhandler(404)
 def page_not_found(e):
     #return render_template('404.html'), 404
     return "The route {} does not exist".format(request.url), 404
 
+@app.route("/ajax/servers/online")
+def get_servers_online():
+   nm = nmap.PortScanner()
+   nm.scan(hosts='129.242.219.0/24', arguments='-n -sP -PE -PA21,23,80,3389')
+   host_list = [{str(x): nm[x]["status"]["state"]} for x in nm.all_hosts()]
+   print(host_list)
+   return json.dumps(host_list)
+@app.route("/ajax/server/online/<path:ip>")
+def get_server_online(ip):
+    nm = nmap.PortScanner()
+    nm.scan(ip,  arguments='-n -sP -PE -PA21,23,80,3389'        )
+    res = {nm.all_hosts()[0]: nm[nm.all_hosts()[0]].state()}
+    return json.dumps(res)
 
 @app.route("/utils/isonline/<path:ip>")
 def check_server(ip):
