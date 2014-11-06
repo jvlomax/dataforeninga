@@ -20,10 +20,8 @@
         {% endblock %}
     </head>
     <body>
-        <!--<div class="container">-->
         <header>
             {%  block nav %}
-                <!--<div class="navbar navbar-default" role="navigation">-->
                 <div class="navbar navbar-inverse navbar-top" role="navigation">
                     <div class="container-fluid">
                         <div class="navbar-header">
@@ -44,17 +42,17 @@
                             </ul>
                         </div>
                     </div>
-
                 </div>
             {% endblock %}
+            
         </header>
-
         <div id="header-bottom"></div>
         <div class="jumbo shadow container">
             {% block content %}
-            {% endblock %}
+            {% endblock content %}
         </div>
 
+        
     {% block post_script %}
     {% endblock post_script %}
     </body>

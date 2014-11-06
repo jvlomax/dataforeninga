@@ -23,22 +23,23 @@
                   <span class="text-muted">Available Ips</span>
                 </div>
               </div>
-
             <center>
-                <table class="table table-hover extra-wide tab">
-                <thead>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name </th>
-                    </tr>
-                </thead>
-                {%  for member in members %}
+            <table class="table table-hover extra-wide tab">
+            <thead>
                 <tr>
-                    <td>{{ member.first_name }}</td>
-                    <td>{{ member.last_name }}</td>
+                    <th>First Name</th>
+                    <th>Last Name </th>
                 </tr>
-                {% endfor %}
-                </table>
+            </thead>
+            {%  for member in members %}
+            <tr>
+                <td>{{ member.first_name }}</td>
+                <td>{{ member.last_name }}</td>
+            </tr>
+            {% endfor %}
+
+
+            </table>
             </center>
         </div>
     </div>
