@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #444;
+}
+
+p{
+    width: 700px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+    text-align: left;
+}
+
+article {
+  width: 700px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12pt;
+  text-align: left;
+}
+
+.article-header{
+    font-family: Consolas, monaco, monospace;
+    font-size: 10pt;
+    font-style: italic;
+    text-align: right;
+}
+
+.shadow {
+    -moz-box-shadow:    3px 3px 2px 2px #ccc;
+    -webkit-box-shadow: 3px 3px 2px 2px #ccc;
+    box-shadow:         3px 3px 2px 2px #ccc;
+}
+ 
+div.jumbo {
+    margin-top: 10px;
+    padding: 10px 0 30px 0;
+    background-color: #eeeeee;
+    -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+    overflow: auto;
+}
+
+
+.navbar-top{
+    width: 100%;
+    border-radius: 0px;
+}
+
+h2 {
+  font-size: 3em;
+  margin-top: 40px;
+  text-align: center;
+  text-decoration: bold;
+  letter-spacing: -2px;
+}
+ 
+h3 {
+  font-size: 1.7em;
+  font-weight: 100;
+  margin-top: 30px;
+  text-align: center;
+  letter-spacing: -1px;
+  color: #999;
+}
+
+.h-placing{
+    margin-top: 20px;
+}

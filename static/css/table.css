@@ -1,0 +1,49 @@
+.tab {
+	margin:0px;padding:0px;
+	width:700px;
+	border:1px solid #CECECE;
+}
+
+.tab table{
+    border-collapse: collapse;
+        border-spacing: 0;
+	width:100%;
+	height:100%;
+	margin:0px;padding:0px;
+}
+
+.tab thead th{
+	background-color: #404040;
+	color: #A4A4A4;
+}
+
+.tab tr{
+	height: 30px;
+	width: 110px;
+}
+
+.tab tr:hover{
+	background-color: #000000;
+}
+
+.tab th{
+	padding-left: 10px;
+	text-align: left;
+}
+
+.tab td{
+	padding-left: 10px;
+	text-align: left;
+}
+
+.tab tr:nth-child(odd){
+	background-color:#eeeeee; 
+}
+.tab tr:nth-child(even){ 
+	background-color:#ffffff; 
+}
+
+
+.extra-wide{
+	width: 900px;
+}
