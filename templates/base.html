@@ -18,9 +18,10 @@
         {% endblock %}
     </head>
     <body>
-        <div class="container">
+        <!--<div class="container">-->
+        <header>
             {%  block nav %}
-                <div class="navbar navbar-default" role="navigation">
+                <!--<div class="navbar navbar-default" role="navigation">-->
                     <div class="container-fluid">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -41,12 +42,14 @@
                         </div>
                     </div>
 
-                </div>
+                
             {% endblock %}
+        </header>
+        
             {% block content %}
             {% endblock %}
 
-        </div>
+
     {% block post_script %}
     {% endblock post_script %}
     </body>
