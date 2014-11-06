@@ -62,3 +62,10 @@ h3 {
 .h-placing{
     margin-top: 20px;
 }
+
+#header-bottom{
+    margin-top: -20px;
+    background-color: #3399FF; 
+    height: 8px;
+    width: 100%;
+}
