@@ -225,6 +225,7 @@ th {
   img {
     max-width: 100% !important;
   }
+  
   p,
   h2,
   h3 {
@@ -235,6 +236,8 @@ th {
   h3 {
     page-break-after: avoid;
   }
+
+
   select {
     background: #fff !important;
   }
@@ -984,6 +987,7 @@ hr {
   overflow: visible;
   clip: auto;
 }
+
 h1,
 h2,
 h3,
@@ -1102,6 +1106,7 @@ h6,
 p {
   margin: 0 0 10px;
 }
+
 .lead {
   margin-bottom: 20px;
   font-size: 16px;

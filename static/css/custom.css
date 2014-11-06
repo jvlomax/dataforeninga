@@ -19,22 +19,8 @@
 
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #444;
-}
 
-article {
-    font-family: Consolas, monaco, monospace;
-    font-size: 20px;
-}
-.article-header{
-    font-family: Consolas, monaco, monospace;
-    font-size: 13px;
-    font-style: italic;
-}
+
 
 .col-centered{
     float:none;
@@ -75,4 +61,11 @@ td#table-icons {
 
 .hidden-alert {
     display: none;
+}
+
+#header-bottom{
+    margin-top: -20px;
+    background-color: #3399FF; 
+    height: 8px;
+    width: 100%;
 }
